@@ -1,0 +1,59 @@
+{
+  "name": "dsh-pijul",
+  "version": "0.2.0",
+  "description": "Pijul distributed version control for DeepSeek Harness: sixteen tools that drive the pijul CLI — status, log, diff, init, clone, add, record, change, unrecord, reset, push, pull, remote, channel, apply and identity — through the sandboxed shell service.",
+  "type": "module",
+  "main": "index.mjs",
+  "exports": {
+    ".": "./index.mjs",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "index.mjs",
+    "cordis.patch.yml",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20",
+    "dsh": ">=0.2.0 <0.3.0"
+  },
+  "scripts": {
+    "test": "node --test test/",
+    "test:unit": "node --test test/unit.test.mjs",
+    "test:integration": "node --test test/integration.test.mjs"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Erkin Alp Güney",
+    "email": "erkinalp9035@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/erkinalp/dsh-pijul.git"
+  },
+  "homepage": "https://github.com/erkinalp/dsh-pijul#readme",
+  "bugs": {
+    "url": "https://github.com/erkinalp/dsh-pijul/issues"
+  },
+  "keywords": [
+    "deepseek",
+    "deepseek-harness",
+    "harness",
+    "dsh",
+    "dsh-plugin",
+    "pijul",
+    "vcs",
+    "version-control",
+    "patch",
+    "darcs",
+    "agent"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
+}

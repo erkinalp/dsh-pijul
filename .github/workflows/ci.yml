@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: node ${{ matrix.node }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        node: ['20', '22', '24']
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Unit tests (no pijul required)
+        run: npm run test:unit
+
+      - name: Integration tests (self-skips without pijul)
+        run: npm run test:integration
+
+      - name: Verify the bundle manifest resolves
+        run: |
+          node -e '
+            const pkg = JSON.parse(require("fs").readFileSync("package.json", "utf8"));
+            if (!pkg.dsh?.bundle?.patch) throw new Error("missing dsh.bundle.patch");
+            const fs = require("fs");
+            if (!fs.existsSync(pkg.dsh.bundle.patch)) throw new Error("bundle patch file missing");
+            if (pkg.main !== "index.mjs") throw new Error("main must be index.mjs");
+            if (!fs.existsSync(pkg.main)) throw new Error("entry point missing");
+            console.log("bundle manifest ok:", pkg.name, pkg.version);
+          '
+
+      - name: Smoke-import the entry point
+        run: node -e 'import("./index.mjs").then(m => { if (typeof m.apply !== "function") throw new Error("no apply"); if (!Array.isArray(m.inject)) throw new Error("no inject"); console.log("entry point ok:", m.name) })'

@@ -1,0 +1,22 @@
+# dsh-pijul bundle layer.
+#
+# Inserts the pijul plugin row into the profile composition. The row resolves
+# the package by name from the profile's node_modules (pnpm links it there when
+# the bundle is installed with `dsh plugin --profile <name> add dsh-pijul`).
+#
+# The plugin registers Host-side model tools (pijul_status, pijul_log, ...)
+# through the tools registry, so every session on the profile can drive the
+# pijul CLI. It publishes no service, so it needs no isolate realm and can sit
+# loose in the profile composition like tool-bash rows in the standard preset.
+#
+# To pin an absolute pijul executable instead of resolving it on PATH, override
+# this row in your profile's own cordis.patch.yml (later layers win per row, and
+# a patch replaces the row's whole config, so restate the id and name):
+#
+#   - id: pijul
+#     name: dsh-pijul
+#     config:
+#       binary: /usr/local/bin/pijul
+- insert:
+    - id: pijul
+      name: dsh-pijul

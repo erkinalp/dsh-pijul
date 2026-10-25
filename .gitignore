@@ -1,0 +1,10 @@
+node_modules/
+*.tgz
+npm-debug.log*
+.DS_Store
+coverage/
+.nyc_output/
+*.log
+
+# Local pijul repositories (nested .pijul is a repository of its own)
+.pijul/
